@@ -6,8 +6,8 @@ def get_files_list(image_path,mask_path,image_type,mask_type):
   2. Takes type of image and mask
   3. Returns list of image and mask files
   '''
-  image_dir = "path/to/image/folder"
-  mask_dir = "path/to/mask/folder"
+  image_dir = image_path
+  mask_dir = mask_path
 
   image_type = image_type
   mask_type = mask_type
