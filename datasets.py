@@ -4,7 +4,7 @@ from torch.utils.data import Dataset
 class Image_Dataset(Dataset):
     '''
     1. Takes list of image_files
-    2. Preprocess image
+    2. Preprocess image (convert to tensors return [C, H, W])
     3. Augment image
     '''
     def __init__(self, image_files, input_size=(224, 224), augmentation_transforms=None):
