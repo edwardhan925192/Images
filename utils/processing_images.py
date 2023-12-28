@@ -18,19 +18,9 @@ def preprocess_image(path):
     img_ten = torch.tensor(img)
     return img_ten
 
-def preprocess_mask(path):
+def augment_image(image):
 
-    msk = cv2.imread(path, cv2.IMREAD_UNCHANGED)
-    msk = msk.astype('float32')
-    msk/=255.0
-    msk_ten = torch.tensor(msk)
-
-    return msk_ten
-
-def augment_image(image, mask):
-
-    image_np = image.permute(1, 2, 0).numpy()
-    mask_np = mask.numpy()
+    image_np = image.permute(1, 2, 0).numpy()    
 
     transform = A.Compose([
         A.Resize(256,256, interpolation=cv2.INTER_NEAREST),
@@ -49,10 +39,9 @@ def augment_image(image, mask):
 
     ])
 
-    augmented = transform(image=image_np, mask=mask_np)
-    augmented_image, augmented_mask = augmented['image'], augmented['mask']
+    augmented = transform(image=image_np)
+    augmented_image = augmented['image']
 
-    augmented_image = torch.tensor(augmented_image, dtype=torch.float32).permute(2, 0, 1)
-    augmented_mask = torch.tensor(augmented_mask, dtype=torch.float32)
+    augmented_image = torch.tensor(augmented_image, dtype=torch.float32).permute(2, 0, 1)    
 
-    return augmented_image, augmented_mask
+    return augmented_image
