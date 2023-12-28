@@ -12,15 +12,17 @@ def preprocess_image(path):
     3. Permute image into [C, H, W] shape
     4. Convert to tensors 
     '''
-    
-    img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
-    img = np.tile(img[...,None],[1, 1, 3])
+    img = cv2.imread(path, cv2.IMREAD_UNCHANGED)    
+
+    if len(img.shape) == 2:  # Grayscale image
+        img = np.tile(img[..., None], [1, 1, 3])
+
     img = img.astype('float32')
     mx = np.max(img)
     if mx:
-        img/=mx
+        img /= mx
 
-    img = np.transpose(img, (2, 0, 1))
+    img = np.transpose(img, (2, 0, 1))    
     img_ten = torch.tensor(img)
     return img_ten
 
