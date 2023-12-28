@@ -2,9 +2,9 @@ import os
 
 def get_files_list(image_path,mask_path,image_type,mask_type):
   '''
-  1. Takes path of image and mask
-  2. Takes type of image and mask
-  3. Returns list of image and mask files
+  1. Takes path of image 
+  2. Takes type of image ex) 'jpg', 'png' 
+  3. Returns list of image 
   '''
   image_dir = image_path
   mask_dir = mask_path
