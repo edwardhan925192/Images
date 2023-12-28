@@ -6,7 +6,13 @@ from torchvision import transforms
 import tifffile as tiff
 
 def preprocess_image(path):
-
+    '''
+    1. Load the image from path
+    2. Add dimension if it only has one 
+    3. Permute image into [C, H, W] shape
+    4. Convert to tensors 
+    '''
+    
     img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     img = np.tile(img[...,None],[1, 1, 3])
     img = img.astype('float32')
@@ -19,9 +25,9 @@ def preprocess_image(path):
     return img_ten
 
 def augment_image(image):
-
+    
     image_np = image.permute(1, 2, 0).numpy()    
-
+    
     transform = A.Compose([
         A.Resize(256,256, interpolation=cv2.INTER_NEAREST),
         A.HorizontalFlip(p=0.5),
