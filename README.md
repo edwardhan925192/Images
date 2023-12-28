@@ -4,6 +4,7 @@ this repo this with images
 # Sample usage
 ```markdown
 from utils.get_files import get_files_list
+from datasets import Image_Datasets
 
 image_dir = "path/to/image/folder"
 image_type = 'png'
