@@ -3,6 +3,7 @@ this repo this with images
 
 # Sample usage
 ```markdown
+!git clone 'https://github.com/edwardhan925192/Images.git'
 from utils.get_files import get_files_list
 from datasets import Image_Dataset
 
