@@ -6,10 +6,11 @@ this repo this with images
 !git clone 'https://github.com/edwardhan925192/Images.git'
 %cd '/content/Images'
 from utils.get_files import get_files_list
+from torch.utils.data import DataLoader
 from datasets import Image_Dataset
 
 image_dir = "path/to/image/folder"
-image_type = 'png'
+image_type = 'jpg'
 batch_size = 32
 
 # ================= 0. Get image files paths ================== #
