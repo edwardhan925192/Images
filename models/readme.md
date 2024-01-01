@@ -4,6 +4,7 @@
 ```markdown
 from models.ijepa import VisionTransformerPredictor, VisionTransformer
 import torch.nn.functional as F
+from utils.asks.mask_application import apply_masks
 
 # -- 0. datasets
 from utils.masks.maskcollator_vit import MaskCollator
