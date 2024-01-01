@@ -1,6 +1,6 @@
 # mask_collator
 ```markdown
-from Images.utils.masks.maskcollator 
+from Images.utils.masks.maskcollator_vit import MaskCollator 
 # -- initialize collator 
 collator = MaskCollator()
 
