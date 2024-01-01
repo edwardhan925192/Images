@@ -12,11 +12,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from utils.tensors import (
+from Images.utils.tensors import (
     trunc_normal_,
     repeat_interleave_batch
 )
-from utils.masks.mask_application import apply_masks
+from Images.utils.masks.mask_application import apply_masks
 
 
 def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
