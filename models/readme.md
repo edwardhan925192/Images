@@ -2,10 +2,10 @@
 
 # ijepa 
 ```markdown
-from Images.models.ijepa import VisionTransformerPredictor, VisionTransformer
+from models.ijepa import VisionTransformerPredictor, VisionTransformer
 
 # -- 0. datasets
-from Images.utils.masks.maskcollator_vit import MaskCollator
+from utils.masks.maskcollator_vit import MaskCollator
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
