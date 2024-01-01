@@ -3,6 +3,7 @@
 # ijepa 
 ```markdown
 from models.ijepa import VisionTransformerPredictor, VisionTransformer
+import torch.nn.functional as F
 
 # -- 0. datasets
 from utils.masks.maskcollator_vit import MaskCollator
