@@ -3,7 +3,7 @@ repo for images in general
 
 # Sample usage
 ```markdown
-!git clone 'https://github.com/edwardhan925192/Images.git'
+!git clone 'https://github.com/edwardhan925192/images.git'
 %cd '/content/images'
 from utils.get_files import get_files_list
 from torch.utils.data import DataLoader
