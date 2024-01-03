@@ -1,5 +1,15 @@
 # models
 
+# vit main params
+```markdown
+img_size=[224],
+patch_size=16,
+in_chans=3,
+embed_dim=768,
+depth=12,
+num_heads=12,
+```
+
 # ijepa 
 ```markdown
 from models.ijepa import VisionTransformerPredictor, VisionTransformer
