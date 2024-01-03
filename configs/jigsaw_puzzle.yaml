@@ -1,0 +1,10 @@
+data:
+  batch_size: 32    
+  crop_size: 224      
+optimization:
+  ema:
+  - 0.996
+  - 1.0  
+  ipe_scale: 1.0
+  lr: 0.001  
+  weight_decay: 0.04
