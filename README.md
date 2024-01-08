@@ -5,20 +5,26 @@ repo for images in general
 ```markdown
 !git clone 'https://github.com/edwardhan925192/images.git'
 %cd '/content/images'
-from utils.get_files import get_files_list
+from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from datasets import Image_Dataset
 
 image_dir = "path/to/image/folder"
 image_type = 'jpg'
 batch_size = 32
 
-# ================= 0. Get image files paths ================== #
-image_files = get_files_list(image_dir, image_type)
+# -- transformation
+transform = transforms.Compose([  
+    transforms.RandomResizedCrop(224, scale=(0.8, 1.0)), 
+    transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1),
+    transforms.ToTensor()
+])
 
-# ================= 1. Convert images into tensor, preprocess, augment ==================== # 
-dataset = Image_Dataset(image_files, input_size=(224, 224), augmentation_transforms=None)
-dataloader = DataLoader(dataset, batch_size, shuffle=True)
+# -- loading 
+dataset = datasets.ImageFolder(root=image_dir, transform=transform)
 
-# ================= Train models ====================== # 
+# -- loader
+dataloader = DataLoader(dataset, batch_size=32, shuffle=False)
+
 ```
