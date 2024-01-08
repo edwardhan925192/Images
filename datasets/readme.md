@@ -2,6 +2,8 @@
 
 # single folder usage
 ```markdown
+from images.datasets import SingleFolderDataset
+
 # -- transformation
 transform = transforms.Compose([
     transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
