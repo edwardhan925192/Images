@@ -1,7 +1,7 @@
 # Images
 repo for images in general 
 
-# Sample usage
+# dataset usage
 ```markdown
 !git clone 'https://github.com/edwardhan925192/images.git'
 %cd '/content/images'
