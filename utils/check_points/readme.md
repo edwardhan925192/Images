@@ -24,7 +24,7 @@ for epoch in range(num_epochs):
 checkpoint_path = '/path/to/checkpoint/my_model_latest_checkpoint.pth'
 
 # Load the checkpoint
-model_state, optimizer, scheduler, start_epoch = load_checkpoint(checkpoint_path, model, optimizer, scheduler)
+model, optimizer, scheduler, start_epoch = load_checkpoint(checkpoint_path, model, optimizer, scheduler)
 
 # Now you can resume training from the start_epoch
 for epoch in range(start_epoch, num_epochs):
