@@ -1,4 +1,7 @@
 # datasets
+```
+1. dataset --> 2. transform --> 3. loader
+```
 
 # all datasets go over transformation in some sort 
 ```markdown
