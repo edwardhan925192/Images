@@ -6,7 +6,7 @@
 # all datasets go over transformation in some sort 
 ```markdown
 from images.datasets.singlefolder_dataset import SingleFolderDataset
-from images.datasets.dataframe_dataset import SingleFolderDataset
+from images.datasets.dataframe_dataset import DataFrameDataset
 
 # -- transformation
 transform = transforms.Compose([
