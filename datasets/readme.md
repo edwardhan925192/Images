@@ -1,6 +1,6 @@
 # datasets
 
-# single folder usage
+# all datasets go over transformation in some sort 
 ```markdown
 from images.datasets import SingleFolderDataset
 
