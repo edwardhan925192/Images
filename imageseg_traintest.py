@@ -5,10 +5,7 @@ import argparse
 import numpy as np
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-from times_model import Model
-from whole_dataset import TimeSeriesDataset,TimeSeries_ValDataset,TimeSeries_TestDataset
 from schedular.scheduler import initialize_scheduler
 import json
 import pandas as pd
@@ -39,25 +36,16 @@ def train_model(model, df_train, df_validation, learning_rate, num_epochs, batch
     # ==================== MODEL SELECTION ========================== #
     model = Model(configs).to(device)
 
-    # ==================== CRITERION ========================== #
-    def dice_loss(pred, target, smooth = 1.):
-        pred = pred.contiguous()
-        target = target.contiguous()
-
-        intersection = (pred * target).sum(dim=2).sum(dim=2)
-        loss = (1 - ((2. * intersection + smooth) / (pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) + smooth)))
-        return loss.mean()
-
+    # ==================== CRITERION ========================== #    
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     # =================== Scheduler initialization ======================= #
     if scheduler_bool:
       scheduler = initialize_scheduler(optimizer, configs)
 
-    # ==================== TRAINING ========================== #
-    if configs.task_name == 'short_term_forecast':
-        train_dataset = TimeSeriesDataset(output_type, df_train, configs.seq_len, configs.pred_len, target_col)
-        train_loader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=False)
+    # ==================== TRAINING ========================== #    
+    train_dataset = TimeSeriesDataset(output_type, df_train, configs.seq_len, configs.pred_len, target_col)
+    train_loader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=False)
 
         for epoch in range(num_epochs):
             model.train()
