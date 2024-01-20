@@ -103,7 +103,7 @@ def training_step(model, scheduler, train_dataloader, optimizer, criterion = Non
     print(f"Epoch {epoch + 1}/{num_epochs}, Training Loss: {average_training_loss}")
 
 
-# ================ TRAINING STEP ================= #
+# ================ VALIDATION STEP ================= #
 def validation_step(model, val_dataloader, criterion = None):
   model.eval()
   total_val_loss = 0
@@ -130,7 +130,7 @@ def test_step(model, test_dataloader, r_path, device):
   model.load_state_dict(checkpoint['model_state_dict'])
   all_outputs = [] 
   
-  for batch_data in test_dataloader:
+  for batch_data in tqdm(test_dataloader, desc="Processing Batches"):
       batch_data = batch_data.to(device)
       with torch.no_grad():  # Ensures no computational graph is constructed
         outputs = model(batch_data)
