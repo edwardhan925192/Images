@@ -155,7 +155,7 @@ test_df =
 # ================ CHECK POINTS ================= #
 base_directory = 'directory'
 tag = 'name of the model'
-
+best_scores = None
 
 # ===================================== EXAMPLE USAGE ======================================== #
 
