@@ -1,4 +1,50 @@
-# -- torch vision transforms ( needed to be included )
+# -- updated check point
+
+def save_checkpoint(model, epoch, tag, base_directory, optimizer=None, current_val_score=None, best_scores=None, checkpoint_freq=1):
+    if not os.path.exists(base_directory):
+        os.makedirs(base_directory)
+
+    save_dict = {
+        'model_state_dict': model.state_dict(),
+        'epoch': epoch
+    }
+
+    if optimizer is not None:
+        save_dict['optimizer_state_dict'] = optimizer.state_dict()
+
+    if current_val_score is not None:
+        if best_scores is None:
+            best_scores = [(float('inf'), ''), (float('inf'), '')]
+
+        current_filename = f'{tag}_val{current_val_score:.4f}.pth'
+        save_path = os.path.join(base_directory, current_filename)
+
+        # Insert new score and sort
+        best_scores.append((current_val_score, current_filename))
+        best_scores.sort(key=lambda x: x[0])
+
+        # Keep only the top 2 scores
+        best_scores = best_scores[:2]
+
+        # Check if current model is among the top 2
+        if current_val_score in [score[0] for score in best_scores]:
+            torch.save(save_dict, save_path)
+
+        # Remove files that are no longer among the top 2
+        for score, filename in best_scores[2:]:
+            file_path = os.path.join(base_directory, filename)
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+    # Regular checkpoint updates
+    if (epoch + 1) % checkpoint_freq == 0:
+        checkpoint_path = os.path.join(base_directory, f'{tag}_checkpoint_epoch_{epoch + 1}.pth')
+        torch.save(save_dict, checkpoint_path)
+
+    return best_scores
+# ========================================= new cell ================================================= #
+
+
 def dataset_prep(train_df, val_df, collater, batch_sizes, shuffle, transform ):
     # -- target col
     def generate_target_columns(start, end):
