@@ -60,24 +60,27 @@ def loading_states(load_dir, model, optimizer, scheduler):
   return model, optimizer, scheduler, start_epoch
 
 
-def training_step(model, scheduler, train_dataloader, optimizer, criterion = None):
+def training_step(model, scheduler, train_dataloader, optimizer, criterion=None, accumulation_steps=4):
     model.train()
     total_loss = 0
+    optimizer.zero_grad()  # Move zero_grad to outside the batch loop
 
     for batch_idx, (batch_data, batch_target) in enumerate(tqdm(train_dataloader, desc=f"Epoch {epoch + 1}/{num_epochs}")):
         batch_data, batch_target = batch_data.to(device), batch_target.to(device)
-        optimizer.zero_grad()
+        
         outputs = model(batch_data)
-
-        batch_target = batch_target.long()  # -- convert to long
+        batch_target = batch_target.long()
         loss = criterion(outputs, batch_target)
-
+        loss = loss / accumulation_steps  # Normalize our loss (if averaged)
         loss.backward()
-        optimizer.step()
-        total_loss += loss.item()
+
+        if (batch_idx + 1) % accumulation_steps == 0:  # Perform optimizer step every 'accumulation_steps' batches
+            optimizer.step()
+            optimizer.zero_grad()  # Zero the gradient buffers
+            total_loss += loss.item()
 
     average_training_loss = total_loss / len(train_dataloader)
-    scheduler.step() # -- scheduler step
+    scheduler.step()  # Update learning rate schedule
     print(f"Epoch {epoch + 1}/{num_epochs}, Training Loss: {average_training_loss}")
 
 
@@ -148,6 +151,7 @@ transform = transforms.Compose([
 # ================ TRAINING STEP ================= #
 num_epochs =
 learning_rate = 0.001
+accumulation_steps = 1
 
 # ================ VALIDATION STEP ================= #
 
@@ -173,10 +177,10 @@ train_dataloader, val_dataloader = dataset_prep(train_df, val_df, collater, batc
 
 for epoch in range(start_epoch, num_epochs):
   # -- training
-  training_step(model, scheduler, train_dataloader, optimizer, criterion = None)
+  training_step(model, scheduler, train_dataloader, optimizer, criterion, accumulation_steps)
 
   # -- validation
-  val_loss = validation_step(model, val_dataloader, criterion = None)
+  val_loss = validation_step(model, val_dataloader, criterion)
 
   # -- saving check points
   best_scores = check_points(model, epoch, tag, base_directory, optimizer, val_loss, best_scores = None)
