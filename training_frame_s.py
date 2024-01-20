@@ -1,4 +1,32 @@
 # -- torch vision transforms ( needed to be included )
+def dataset_prep(train_df, val_df, collater, batch_sizes, shuffle, transform ):
+    # -- target col
+    def generate_target_columns(start, end):
+      return [str(i) for i in range(start, end + 1)]
+    target_columns = generate_target_columns(1, 16)
+    # --
+
+    # -- train
+    train_dataset = DataFrameDataset_custom(train_df, 'img_path', target_columns, transform=transform)
+
+    if collater:
+        train_dataloader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=shuffle, collate_fn=collater)
+    else:
+        train_dataloader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=shuffle)
+
+    # -- validation
+    val_dataset = DataFrameDataset_custom(val_df, 'img_path', target_columns, transform=transform)
+
+    if collater:
+        val_dataloader = DataLoader(val_dataset, batch_size=batch_sizes, shuffle=shuffle, collate_fn=collater)
+    else:
+        val_dataloader = DataLoader(val_dataset, batch_size=batch_sizes, shuffle=shuffle)
+
+
+    return train_dataloader, val_dataloader
+
+# ============================================= NEW CELL ============================================= # 
+
 import pickle
 import os
 import sys
@@ -30,32 +58,6 @@ def initialization(learning_rate, model_class, scheduler, sceduler_config):
 def loading_states(load_dir, model, optimizer, scheduler):
   model, optimizer, scheduler, start_epoch = load_checkpoint(load_dir, model, optimizer, scheduler)
   return model, optimizer, scheduler, start_epoch
-
-def dataset_prep(train_df, val_df, collater, batch_sizes, shuffle, transform ):
-    # -- target col
-    def generate_target_columns(start, end):
-      return [str(i) for i in range(start, end + 1)]
-    target_columns = generate_target_columns(1, 16)
-    # --
-
-    # -- train
-    train_dataset = DataFrameDataset_custom(train_df, 'img_path', target_columns, transform=transform)
-
-    if collater:
-        train_dataloader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=shuffle, collate_fn=collater)
-    else:
-        train_dataloader = DataLoader(train_dataset, batch_size=batch_sizes, shuffle=shuffle)
-
-    # -- validation
-    val_dataset = DataFrameDataset_custom(val_df, 'img_path', target_columns, transform=transform)
-
-    if collater:
-        val_dataloader = DataLoader(val_dataset, batch_size=batch_sizes, shuffle=shuffle, collate_fn=collater)
-    else:
-        val_dataloader = DataLoader(val_dataset, batch_size=batch_sizes, shuffle=shuffle)
-
-
-    return train_dataloader, val_dataloader
 
 
 def training_step(model, scheduler, train_dataloader, optimizer, criterion = None):
