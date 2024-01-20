@@ -18,39 +18,18 @@ from torch.utils.data import Dataset, DataLoader
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# ================ INIT ================= #
-learning_rate = 0.001
-scheduler_config = {'T_0': 100, 'T_mult': 1, 'eta_min': 0.0001}
-scheduler = 'CosineAnnealingWarmRestarts'
-
-def initialization(learning_rate, model_class, scheduler, sceduler_config, criterion):
+def initialization(learning_rate, model_class, scheduler, sceduler_config):
   model = model_class().to(device) # -- model = JNet().to(device)
   optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
   scheduler_manager = SchedulerManager()
   scheduler_manager.configs[scheduler] = scheduler_config # -- config update
   scheduler = scheduler_manager.initialize_scheduler(optimizer, 'CosineAnnealingWarmRestarts')
   criterion = nn.CrossEntropyLoss()  # -- criterion
-  return model, optimizer, scheduler, criterion
-
-# ================ LOADING STEP ================= #
-load_dir = ''
-load_states = True # -- bool
+  return model, optimizer, scheduler
 
 def loading_states(load_dir, model, optimizer, scheduler):
   model, optimizer, scheduler, start_epoch = load_checkpoint(load_dir, model, optimizer, scheduler)
   return model, optimizer, scheduler, start_epoch
-
-# ================ DATA PREP ================= #
-train_df =
-val_df =
-collater = custom_collate_fn # or False
-batch_sizes = 24
-shuffle = False
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
 
 def dataset_prep(train_df, val_df, collater, batch_sizes, shuffle, transform ):
     # -- target col
@@ -79,9 +58,6 @@ def dataset_prep(train_df, val_df, collater, batch_sizes, shuffle, transform ):
     return train_dataloader, val_dataloader
 
 
-# ================ TRAINING STEP ================= #
-num_epochs =
-
 def training_step(model, scheduler, train_dataloader, optimizer, criterion = None):
     model.train()
     total_loss = 0
@@ -103,7 +79,6 @@ def training_step(model, scheduler, train_dataloader, optimizer, criterion = Non
     print(f"Epoch {epoch + 1}/{num_epochs}, Training Loss: {average_training_loss}")
 
 
-# ================ VALIDATION STEP ================= #
 def validation_step(model, val_dataloader, criterion = None):
   model.eval()
   total_val_loss = 0
@@ -122,7 +97,7 @@ def validation_step(model, val_dataloader, criterion = None):
 
   return total_val_loss
     
-# ================ TEST STEP ================= #
+
 def test_step(model, test_dataloader, r_path, device):
   model = model.to(device)  
   checkpoint = torch.load(r_path, map_location=device)
@@ -141,13 +116,45 @@ def test_step(model, test_dataloader, r_path, device):
 
   return dataframe
     
-# ================ CHECK POINTS ================= #
-base_directory = 'directory'
-tag = 'name of the model'
 
 def check_points(model, epoch, tag, base_directory, optimizer, val_score, best_scores = None):
   best_scores = save_checkpoint(model, epoch, tag, base_directory, optimizer, val_score, best_scores, checkpoint_freq=1)
   return best_scores
+  
+# ========================================== NEW CELL ============================================= #
+
+# ================ INIT ================= #
+scheduler_config = {'T_0': 100, 'T_mult': 1, 'eta_min': 0.0001}
+scheduler = 'CosineAnnealingWarmRestarts'
+
+# ================ LOADING STEP ================= #
+load_dir = ''
+load_states = True # -- bool
+
+# ================ DATA PREP ================= #
+train_df =
+val_df =
+collater = custom_collate_fn # or False
+batch_sizes = 24
+shuffle = False
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+# ================ TRAINING STEP ================= #
+num_epochs =
+learning_rate = 0.001
+
+# ================ VALIDATION STEP ================= #
+
+# ================ TEST STEP ================= #
+test_df = 
+
+# ================ CHECK POINTS ================= #
+base_directory = 'directory'
+tag = 'name of the model'
 
 
 # ===================================== EXAMPLE USAGE ======================================== #
