@@ -1,6 +1,6 @@
 # -- updated check point
 
-def save_checkpoint(model, epoch, tag, base_directory, optimizer=None, current_val_score=None, best_scores=None, checkpoint_freq=1):
+def save_checkpoint(model, epoch, tag, base_directory, optimizer=None, current_val_score=None, best_scores=None):
     if not os.path.exists(base_directory):
         os.makedirs(base_directory)
 
