@@ -36,11 +36,6 @@ def save_checkpoint(model, epoch, tag, base_directory, optimizer=None, current_v
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    # Regular checkpoint updates
-    if (epoch + 1) % checkpoint_freq == 0:
-        checkpoint_path = os.path.join(base_directory, f'{tag}_checkpoint_epoch_{epoch + 1}.pth')
-        torch.save(save_dict, checkpoint_path)
-
     return best_scores
 # ========================================= new cell ================================================= #
 
